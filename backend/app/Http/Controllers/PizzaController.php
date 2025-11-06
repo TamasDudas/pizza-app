@@ -11,9 +11,27 @@ class PizzaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return PizzaResource::collection(Pizza::orderBy('name')->get());
+
+        $allowedSorts = ['price_small', 'popularity', 'name'];
+
+        $sortBy = $request->query('sort_by', 'name');
+        $direction = $request->query('direction', 'asc');
+
+
+        if (!in_array($sortBy, $allowedSorts)) {
+            $sortBy = 'name';
+        }
+
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'asc';
+        }
+
+        $pizzas = Pizza::orderBy($sortBy, $direction)->get();
+
+        return PizzaResource::collection($pizzas);
     }
 
     /**
@@ -35,7 +53,7 @@ class PizzaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $pizza)
+    public function show(Pizza $pizza)
     {
         return new PizzaResource($pizza);
     }
