@@ -25,7 +25,7 @@ const router = createBrowserRouter([
 				element: <Pizzas />,
 			},
 			{
-				path: '/pizza/:id',
+				path: '/pizzak/:id',
 				element: <Pizza />,
 			},
 			{

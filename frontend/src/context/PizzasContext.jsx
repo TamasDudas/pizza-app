@@ -40,6 +40,7 @@ function PizzasProvider({ children }) {
 	//Népszerű pizzák
 	const fetchPopulerPizzas = async () => {
 		setLoading(true);
+		setError(null);
 		try {
 			const response = await api.get('/pizzas?sort_by=popularity&direction=desc&per_page=6');
 			const responseData = response.data.data;

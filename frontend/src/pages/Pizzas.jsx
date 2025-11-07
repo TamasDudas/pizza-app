@@ -1,6 +1,7 @@
 import React from 'react';
 import { usePizzasContext } from '../context/PizzasContext';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Pizzas() {
 	const {
@@ -56,6 +57,7 @@ export default function Pizzas() {
 										<small className="text-muted">Népszerűség: {pizza.popularity}</small>
 									</div>
 								</div>
+								<Link to={`/pizzak/${pizza.id}`}>Megnézem</Link>
 							</div>
 						</div>
 					))}
