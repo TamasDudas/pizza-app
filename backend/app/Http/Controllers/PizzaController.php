@@ -13,7 +13,7 @@ class PizzaController extends Controller
      */
     public function index(Request $request)
     {
-        return PizzaResource::collection(Pizza::orderBy('name')->get());
+        $pagination = $request->query('per_page', 5);
 
         $allowedSorts = ['price_small', 'popularity', 'name'];
 
@@ -29,7 +29,7 @@ class PizzaController extends Controller
             $direction = 'asc';
         }
 
-        $pizzas = Pizza::orderBy($sortBy, $direction)->get();
+        $pizzas = Pizza::orderBy($sortBy, $direction)->paginate($pagination);
 
         return PizzaResource::collection($pizzas);
     }
