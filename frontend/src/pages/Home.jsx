@@ -1,25 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
+import { usePizzasContext } from '../context/PizzasContext';
 
 export default function Home() {
-	const [popularPizzas, setpopularPizzas] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(null);
-
-	const fetchPizzas = async () => {
-		setLoading(true);
-		try {
-			const response = await api.get('/pizzas?sort_by=popularity&direction=desc&per_page=6');
-			const responseData = response.data.data;
-			console.log(responseData);
-			setpopularPizzas(responseData);
-			setLoading(false);
-		} catch (error) {
-			setError('Hiba történt a lekérdezésben');
-		} finally {
-			setLoading(false);
-		}
-	};
+	const { popularPizzas, fetchPizzas, loading, error } = usePizzasContext();
 
 	useEffect(() => {
 		fetchPizzas();

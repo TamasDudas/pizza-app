@@ -1,11 +1,14 @@
 import { RouterProvider } from 'react-router-dom';
 import router from '../Router.jsx';
+import PizzasProvider from './context/PizzasContext.jsx';
 
 function App() {
 	return (
 		<>
 			<div>
-				<RouterProvider router={router} />
+				<PizzasProvider>
+					<RouterProvider router={router} />
+				</PizzasProvider>
 			</div>
 		</>
 	);
