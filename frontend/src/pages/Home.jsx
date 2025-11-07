@@ -3,10 +3,10 @@ import api from '../api';
 import { usePizzasContext } from '../context/PizzasContext';
 
 export default function Home() {
-	const { popularPizzas, fetchPizzas, loading, error } = usePizzasContext();
+	const { popularPizzas, fetchPopulerPizzas, loading, error } = usePizzasContext();
 
 	useEffect(() => {
-		fetchPizzas();
+		fetchPopulerPizzas();
 	}, []);
 
 	if (loading) {
