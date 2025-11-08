@@ -5,6 +5,7 @@ import Pizza from './src/pages/Pizza';
 import NotFound from './src/pages/NotFound';
 import MainLayout from './src/layouts/MainLayout';
 import Pizzas from './src/pages/Pizzas';
+import Cart from './src/pages/Cart';
 
 const router = createBrowserRouter([
 	{
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
 			{
 				path: '/pizzak',
 				element: <Pizzas />,
+			},
+			{
+				path: '/kosar',
+				element: <Cart />,
 			},
 			{
 				path: '/pizzak/:id',

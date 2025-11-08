@@ -2,6 +2,7 @@ import { RouterProvider } from 'react-router-dom';
 import router from '../Router.jsx';
 import PizzasProvider from './context/PizzasContext.jsx';
 import PizzaProvider from './context/PizzaContext.jsx';
+import CartProvider from './context/CartContext.jsx';
 
 function App() {
 	return (
@@ -9,7 +10,9 @@ function App() {
 			<div>
 				<PizzasProvider>
 					<PizzaProvider>
-						<RouterProvider router={router} />
+						<CartProvider>
+							<RouterProvider router={router} />
+						</CartProvider>
 					</PizzaProvider>
 				</PizzasProvider>
 			</div>
