@@ -35,7 +35,7 @@ const router = createBrowserRouter([
 				element: <Pizza />,
 			},
 			{
-				path: '/rendelés',
+				path: '/rendeles',
 				element: <Order />,
 			},
 			{
