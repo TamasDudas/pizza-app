@@ -31,7 +31,9 @@ function CartProvider({ children }) {
 			return { exsitingItem: true, massage: 'Ez a pizza ezzel a mérettel már a kosárban van' };
 		}
 
-		setCartItems([...cartItems, pizzaData]);
+		const newCartItems = [...cartItems, pizzaData];
+		setCartItems(newCartItems);
+		return { exsitingItem: false, massage: 'Pizza kosárba helyezve' };
 	}
 
 	function removeFromCart(pizza_id, pizza_size) {
@@ -69,7 +71,7 @@ function CartProvider({ children }) {
 
 	function getTotalPrice() {
 		const total = cartItems.reduce((sum, item) => {
-			return sum + item.price * item.quantity;
+			return sum + parseInt(item.price) * parseInt(item.quantity);
 		}, 0);
 
 		return total;
