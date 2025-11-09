@@ -58,7 +58,7 @@ export default function Pizzas() {
 									</p>
 
 									<div className="d-flex justify-content-between align-items-center mt-3">
-										<span className="text-primary fw-bold">{pizza.price_small} Ft-tól</span>
+										<span className="text-success fw-bold">{pizza.price_small} Ft-tól</span>
 										<small className="text-muted">Népszerűség: {pizza.popularity}</small>
 									</div>
 								</div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import OrderForm from '../components/OrderForm';
+import OrderForm from '../components/Forms/OrderForm';
 
 export default function Order() {
 	return (

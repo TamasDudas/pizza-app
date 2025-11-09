@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useCartContext } from '../context/CartContext';
+import { useCartContext } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api from '../../api';
 
 export default function OrderForm() {
 	const { cartItems, getTotalPrice, getTotalItems, clearCart } = useCartContext();
@@ -100,7 +100,6 @@ export default function OrderForm() {
 			clearCart();
 			navigate('/');
 		} catch (error) {
-			console.error('Hiba a megrendelés során:', error);
 			if (error.response) {
 				alert('Hiba a megrendelés során: ' + (error.response.data.message || 'Ismeretlen hiba'));
 			} else {
