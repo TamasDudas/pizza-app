@@ -19,8 +19,12 @@ export default function Home() {
 
 	return (
 		<div className="container mt-4">
-			<h1 className="text-primary mb-4">Pizza Maker</h1>
-			<h2 className="mb-4">Népszerű pizzák</h2>
+			<h1 className="text-success mb-4">Pizza Maker</h1>
+			<h2 className="mb-4">Népszerű pizzáink</h2>
+			<h5 className="my-5">
+				Találd meg te is a kedvencedet az ország legjobb Pizzázójában. Minőségi alapanyagokkal és kemencében
+				sült pizzávál várjuk kedves látogatóinkat.{' '}
+			</h5>
 
 			{pizzas.length === 0 ? (
 				<div className="text-center">Jelenleg nincs ilyen pizza</div>
@@ -43,7 +47,7 @@ export default function Home() {
 									</p>
 
 									<div className="d-flex justify-content-between align-items-center mt-3">
-										<span className="text-primary fw-bold">{pizza.price_small} Ft-tól</span>
+										<span className="text-success fw-bold">{pizza.price_small} Ft-tól</span>
 										<small className="text-muted">Népszerűség: {pizza.popularity}</small>
 									</div>
 								</div>

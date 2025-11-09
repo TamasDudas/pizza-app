@@ -92,11 +92,7 @@ export default function OrderForm() {
 				total_price: getTotalPrice(),
 			};
 
-			console.log('Megrendelés küldése:', orderData);
-
 			const response = await api.post('/orders', orderData);
-
-			console.log('Válasz a szervertől:', response.data);
 
 			alert('Megrendelés sikeresen leadva! Rendelésszám: #' + response.data.order.id);
 
@@ -106,7 +102,6 @@ export default function OrderForm() {
 		} catch (error) {
 			console.error('Hiba a megrendelés során:', error);
 			if (error.response) {
-				console.error('Szerver hiba:', error.response.data);
 				alert('Hiba a megrendelés során: ' + (error.response.data.message || 'Ismeretlen hiba'));
 			} else {
 				alert('Hálózati hiba a megrendelés során');
@@ -119,7 +114,7 @@ export default function OrderForm() {
 	if (cartItems.length === 0) {
 		return (
 			<div className="container py-5">
-				<div className="alert alert-warning">A kosár üres. Kérlek adjon hozzá pizzákat!</div>
+				<div className="alert alert-warning">A kosár üres.</div>
 			</div>
 		);
 	}
