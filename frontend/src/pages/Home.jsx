@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import { usePizzasContext } from '../context/PizzasContext';
 
 export default function Home() {
-	const { pizzas, fetchPizzas, loading, error } = usePizzasContext();
+	const { pizzas, fetchPizzas, loading, error, setSorting } = usePizzasContext();
 
 	useEffect(() => {
-		fetchPizzas(1, 'popularity', 'desc');
+		// Beállítjuk a népszerűség szerinti rendezést
+		setSorting('popularity', 'desc');
+		// Majd lekérjük a pizzákat
+		fetchPizzas(1, '');
 	}, []);
 
 	if (loading) {

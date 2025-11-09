@@ -14,6 +14,7 @@ class PizzaController extends Controller
     public function index(Request $request)
     {
         $pagination = $request->query('per_page', 6);
+        $search = $request->query('search', '');
 
         $allowedSorts = ['price_small', 'popularity', 'name'];
 
@@ -29,7 +30,18 @@ class PizzaController extends Controller
             $direction = 'asc';
         }
 
-        $pizzas = Pizza::orderBy($sortBy, $direction)->paginate($pagination);
+        $query = Pizza::query();
+
+        // 3 Karakter a szűrési limit
+        if (!empty($search) && strlen($search) >= 3) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('description', 'LIKE', "%{$search}%")
+                  ->orWhere('toppings', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $pizzas = $query->orderBy($sortBy, $direction)->paginate($pagination);
 
         return [
             'data' => PizzaResource::collection($pizzas->items()),

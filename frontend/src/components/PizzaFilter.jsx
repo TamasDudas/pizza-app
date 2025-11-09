@@ -1,11 +1,31 @@
 import React from 'react';
 
-export default function PizzaFilter({ sortBy, direction, setSorting }) {
+export default function PizzaFilter({
+	sortBy,
+	direction,
+	setSorting,
+	searchInputRef,
+	onSearchChange,
+}) {
 	return (
 		<div className="row mb-4">
-			<div className="col-md-6">
+			<div className="col-md-8">
 				<div className="card p-3">
-					<h5 className="mb-3">Rendezés</h5>
+					<h5 className="mb-3">Szűrés és keresés</h5>
+
+					{/* Keresési mező */}
+					<div className="mb-3">
+						<label className="form-label">Keresés:</label>
+						<input
+							ref={searchInputRef}
+							type="text"
+							className="form-control"
+							placeholder="Keresés pizzák között... (minimum 3 karakter)"
+							onChange={onSearchChange}
+						/>
+					</div>
+
+					{/* Rendezési opciók */}
 					<div className="row">
 						<div className="col-md-6">
 							<label className="form-label">Rendezés alapja:</label>

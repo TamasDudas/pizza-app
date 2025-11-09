@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { usePizzasContext } from '../context/PizzasContext';
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import PizzaFilter from '../components/PizzaFilter';
+import PizzaList from '../components/PizzaList';
+import SearchInfo from '../components/SearchInfo';
+import debounce from 'lodash.debounce';
 
 export default function Pizzas() {
+	const [searchTerm, setSearchTerm] = useState('');
+	const searchInputRef = React.useRef(null);
 	const {
 		pizzas,
 		fetchPizzas,
@@ -21,9 +25,51 @@ export default function Pizzas() {
 		prevPage,
 	} = usePizzasContext();
 
+	const debouncedSearch = useMemo(() => {
+		return debounce((value) => {
+			setSearchTerm(value);
+			if (value.length >= 3) {
+				fetchPizzas(1, value);
+			} else if (value.length === 0) {
+				fetchPizzas(1, ''); // Üres keresés - mutassa az összes pizzát
+			}
+			// 1-2 karakter esetén nem csinál API hívást, de beállítja a state-et
+		}, 300);
+	}, [fetchPizzas]);
+
+	const handleChange = (e) => {
+		const value = e.target.value;
+		if (value === '') {
+			// Ha üres a keresés, azonnal töltse be az eredeti listát
+			setSearchTerm('');
+			fetchPizzas(1, '');
+		} else {
+			debouncedSearch(value); // Késleltetett keresés
+		}
+	};
+
 	useEffect(() => {
-		fetchPizzas(1);
+		fetchPizzas(1, searchTerm);
 	}, [sortBy, direction]);
+
+	// Komponens betöltésekor töltse be a pizzákat
+	useEffect(() => {
+		fetchPizzas(1, '');
+	}, []);
+
+	useEffect(() => {
+		return () => {
+			debouncedSearch.cancel();
+		};
+	}, [debouncedSearch]);
+
+	const handleResetSearch = () => {
+		setSearchTerm('');
+		fetchPizzas(1, '');
+		if (searchInputRef.current) {
+			searchInputRef.current.value = '';
+		}
+	};
 
 	if (loading) {
 		return <div>A betöltés folyamatban....</div>;
@@ -32,65 +78,47 @@ export default function Pizzas() {
 	if (error) {
 		return <div>A betöltés sikertelen</div>;
 	}
+
 	return (
 		<div className="container mt-4">
 			<h1 className="text-gray mb-4">Találd meg kedvenc pizzádat</h1>
-			<PizzaFilter sortBy={sortBy} direction={direction} setSorting={setSorting} />
 
-			{pizzas.length === 0 ? (
-				<div className="text-center">Jelenleg nincs ilyen pizza</div>
-			) : (
-				<div className="row">
-					{pizzas.map((pizza) => (
-						<div key={pizza.id} className="col-md-4 mb-4">
-							<div className="card h-100">
-								<img
-									src={pizza.image}
-									className="card-img-top"
-									alt={pizza.name}
-									style={{ height: '200px', objectFit: 'cover' }}
-								/>
-								<div className="card-body">
-									<h5 className="card-title">{pizza.name}</h5>
-									<p className="card-text text-muted mb-2">{pizza.description}</p>
-									<p className="card-text">
-										<small className="text-muted">Feltétek: {pizza.toppings}</small>
-									</p>
+			<PizzaFilter
+				sortBy={sortBy}
+				direction={direction}
+				setSorting={setSorting}
+				searchInputRef={searchInputRef}
+				onSearchChange={handleChange}
+			/>
 
-									<div className="d-flex justify-content-between align-items-center mt-3">
-										<span className="text-success fw-bold">{pizza.price_small} Ft-tól</span>
-										<small className="text-muted">Népszerűség: {pizza.popularity}</small>
-									</div>
-								</div>
-								<Link to={`/pizzak/${pizza.id}`} className="btn btn-success w-100 btn-lg mt-4">
-									Megnézem
-								</Link>
-							</div>
-						</div>
-					))}
-				</div>
-			)}
+			<SearchInfo searchTerm={searchTerm} pizzasCount={pizzas.length} onResetSearch={handleResetSearch} />
+
+			<PizzaList pizzas={pizzas} searchTerm={searchTerm} onResetSearch={handleResetSearch} />
 
 			{/* Pagination */}
 			{lastPage > 1 && (
 				<nav className="mt-4">
 					<ul className="pagination justify-content-center">
 						<li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-							<button className="page-link" onClick={prevPage} disabled={currentPage === 1}>
+							<button className="page-link" onClick={() => prevPage(searchTerm)} disabled={currentPage === 1}>
 								Előző
 							</button>
 						</li>
 
 						{Array.from({ length: lastPage }, (_, i) => i + 1).map((page) => (
 							<li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
-								<button className="page-link" onClick={() => goToPage(page)}>
+								<button className="page-link" onClick={() => goToPage(page, searchTerm)}>
 									{page}
 								</button>
 							</li>
 						))}
 
 						<li className={`page-item ${currentPage === lastPage ? 'disabled' : ''}`}>
-							<button className="page-link" onClick={nextPage} disabled={currentPage === lastPage}>
+							<button
+								className="page-link"
+								onClick={() => nextPage(searchTerm)}
+								disabled={currentPage === lastPage}
+							>
 								Következő
 							</button>
 						</li>

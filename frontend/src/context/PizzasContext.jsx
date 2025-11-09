@@ -43,12 +43,14 @@ function PizzasProvider({ children }) {
 	const [direction, setDirection] = useState('desc');
 
 	//Minden pizza
-	const fetchPizzas = async (page = currentPage) => {
+	const fetchPizzas = async (page = currentPage, searchTerm = '') => {
 		setLoading(true);
 		try {
-			const response = await api.get(
-				`/pizzas?page=${page}&per_page=6&sort_by=${sortBy}&direction=${direction}`
-			);
+			let url = `/pizzas?page=${page}&per_page=6&sort_by=${sortBy}&direction=${direction}`;
+			if (searchTerm) {
+				url += `&search=${encodeURIComponent(searchTerm)}`;
+			}
+			const response = await api.get(url);
 			const responseData = response.data;
 			setPizzas(responseData.data);
 			setCurrentPage(responseData.current_page);
@@ -69,21 +71,21 @@ function PizzasProvider({ children }) {
 	};
 
 	// Pagination függvények
-	const goToPage = (page) => {
+	const goToPage = (page, searchTerm = '') => {
 		if (page >= 1 && page <= lastPage) {
-			fetchPizzas(page);
+			fetchPizzas(page, searchTerm);
 		}
 	};
 
-	const nextPage = () => {
+	const nextPage = (searchTerm = '') => {
 		if (currentPage < lastPage) {
-			fetchPizzas(currentPage + 1);
+			fetchPizzas(currentPage + 1, searchTerm);
 		}
 	};
 
-	const prevPage = () => {
+	const prevPage = (searchTerm = '') => {
 		if (currentPage > 1) {
-			fetchPizzas(currentPage - 1);
+			fetchPizzas(currentPage - 1, searchTerm);
 		}
 	};
 

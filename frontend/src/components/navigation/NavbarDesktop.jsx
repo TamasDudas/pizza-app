@@ -5,7 +5,7 @@ import { useCartContext } from '../../context/CartContext';
 export default function NavbarDesktop() {
 	const { getTotalItems } = useCartContext();
 	return (
-		<nav className="navbar navbar-light bg-white shadow-sm py-3">
+		<nav className="navbar navbar-light bg-white shadow-sm py-3 mb-5">
 			<div className="container d-flex justify-content-between align-items-center">
 				{/* LOGO */}
 				<Link to="/" className="navbar-brand fw-bold text-danger m-0">
@@ -26,7 +26,6 @@ export default function NavbarDesktop() {
 							Pizzák
 						</Link>
 					</div>
-
 					{/* KOSÁR */}
 					<div>
 						<Link to="/kosar" className="nav-link position-relative m-0">
