@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Mail\OrderConfirmationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -23,6 +24,14 @@ class OrderController extends Controller
 
 
         $order = Order::create($validated);
+
+        // ITT KAPJA MEG AZ OrderConfirmationMail AZ ORDER-T
+        try {
+            Mail::to($order->customer_email)->send(new OrderConfirmationMail($order));
+        } catch (\Exception $e) {
+            // Email hiba esetén logoljuk, de ne szakítsuk meg a rendelést
+            Log::error('Order confirmation email failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'message' => 'Sikeres rendelés',

@@ -12,13 +12,16 @@ use App\Models\Order;
 
 class OrderConfirmationMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $order;
 
     /**
      * Create a new message instance.
      */
+
+    // AZ ORDER-T MAJD A CONTROLLERBEN FOGJUK BEÁLLÍTANI
     public function __construct(Order $order)
     {
         $this->order = $order;
@@ -29,6 +32,7 @@ class OrderConfirmationMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        //META ADATOK BEÁLLÍTÁSA
         return new Envelope(
             subject: 'Rendelés visszaigazolás - #' . $this->order->id,
         );
