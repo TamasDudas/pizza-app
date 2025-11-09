@@ -15,7 +15,8 @@ class ContactController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'subject' => 'required|string|max:255',
-            'message' => 'required|string|max:1000'
+            'message' => 'required|string|max:1000',
+            'aszf_accepted' => 'required|boolean|accepted'
         ]);
 
         //Mentjük az eadatbázisba

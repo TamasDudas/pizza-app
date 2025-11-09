@@ -13,8 +13,7 @@ export default function OrderForm() {
 		phone: '',
 		address: '',
 		email: '',
-		aszf: false,
-		privacy: false,
+		aszf_accepted: false,
 	});
 
 	const handleChange = (e) => {
@@ -35,6 +34,7 @@ export default function OrderForm() {
 
 	const validateForm = () => {
 		const newErrors = {};
+		console.log('Validáció - formData:', formData); // DEBUG
 
 		if (!formData.name.trim()) {
 			newErrors.name = 'A név megadása kötelező';
@@ -60,15 +60,12 @@ export default function OrderForm() {
 			newErrors.address = 'A cím legalább 5 karakter hosszú legyen';
 		}
 
-		if (!formData.aszf) {
-			newErrors.aszf = 'Az ÁSZF elfogadása kötelező';
-		}
-
-		if (!formData.privacy) {
-			newErrors.privacy = 'Az adatvédelmi tájékoztató elfogadása kötelező';
+		if (!formData.aszf_accepted) {
+			newErrors.aszf_accepted = 'Az ÁSZF elfogadása kötelező';
 		}
 
 		setErrors(newErrors);
+		console.log('Validációs hibák:', newErrors); // DEBUG
 		return Object.keys(newErrors).length === 0;
 	};
 
@@ -89,8 +86,11 @@ export default function OrderForm() {
 				customer_phone: formData.phone,
 				delivery_address: formData.address,
 				items: cartItems,
+				aszf_accepted: formData.aszf_accepted,
 				total_price: getTotalPrice(),
 			};
+
+			console.log(orderData);
 
 			const response = await api.post('/orders', orderData);
 
@@ -192,16 +192,16 @@ export default function OrderForm() {
 						<div className="form-check mb-3">
 							<input
 								type="checkbox"
-								className={`form-check-input ${errors.aszf ? 'is-invalid' : ''}`}
+								className={`form-check-input ${errors.aszf_accepted ? 'is-invalid' : ''}`}
 								id="aszf"
-								name="aszf"
-								checked={formData.aszf}
+								name="aszf_accepted"
+								checked={formData.aszf_accepted}
 								onChange={handleChange}
 							/>
 							<label className="form-check-label" htmlFor="aszf">
 								Elfogadom az <strong>ÁSZF</strong>-ben foglaltakat <span className="text-danger">*</span>
 							</label>
-							{errors.aszf && <div className="invalid-feedback d-block">{errors.aszf}</div>}
+							{errors.aszf_accepted && <div className="invalid-feedback d-block">{errors.aszf_accepted}</div>}
 						</div>
 
 						<button type="submit" className="btn btn-success w-100 btn-lg" disabled={loading}>

@@ -7,6 +7,7 @@ export default function ContactForm() {
 		email: '',
 		subject: '',
 		message: '',
+		aszf_accepted: false,
 	});
 	const [loading, setLoading] = useState(false);
 
@@ -25,6 +26,7 @@ export default function ContactForm() {
 				email: formData.email,
 				subject: formData.subject,
 				message: formData.message,
+				aszf_accepted: formData.aszf_accepted,
 			};
 
 			const response = await api.post('/contact', emailData);
@@ -38,6 +40,7 @@ export default function ContactForm() {
 				email: '',
 				subject: '',
 				message: '',
+				aszf_accepted: false,
 			});
 		} catch (error) {
 			console.error('Hiba:', error);
@@ -126,6 +129,21 @@ export default function ContactForm() {
 										onChange={handleChange}
 										placeholder="Írd ide az üzeneted..."
 									></textarea>
+								</div>
+
+								<div className="form-check mb-3">
+									<input
+										type="checkbox"
+										className="form-check-input"
+										id="aszf"
+										name="aszf_accepted"
+										checked={formData.aszf_accepted}
+										onChange={handleChange}
+										required
+									/>
+									<label className="form-check-label" htmlFor="aszf">
+										Elfogadom az <strong>ÁSZF</strong>-ben foglaltakat <span className="text-danger">*</span>
+									</label>
 								</div>
 
 								<div className="d-grid">

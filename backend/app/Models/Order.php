@@ -13,7 +13,8 @@ class Order extends Model
         'delivery_address',
         'items',
         'total_price',
-        'status'
+        'status',
+        'aszf_accepted'
     ];
 
     protected $casts = [

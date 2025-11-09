@@ -21,7 +21,6 @@ export default function Pizza() {
 	useEffect(() => {
 		fetchPizza(id);
 	}, [id]);
-	console.log(pizza);
 
 	const getSizePrice = (size) => {
 		if (!pizza) return null;
