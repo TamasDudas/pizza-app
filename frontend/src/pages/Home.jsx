@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api from '../api';
+import { Link } from 'react-router-dom';
 import { usePizzasContext } from '../context/PizzasContext';
 
 export default function Home() {
@@ -47,6 +47,9 @@ export default function Home() {
 										<small className="text-muted">Népszerűség: {popularPizza.popularity}</small>
 									</div>
 								</div>
+								<Link to={`/pizzak/${popularPizza.id}`} className="btn btn-success w-100 btn-lg mt-4">
+									Megnézem
+								</Link>
 							</div>
 						</div>
 					))}

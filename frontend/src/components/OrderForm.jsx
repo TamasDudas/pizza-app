@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useCartContext } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
+import api from '../api';
 
 export default function OrderForm() {
-	const { cartItems, getTotalPrice, getTotalItems } = useCartContext();
+	const { cartItems, getTotalPrice, getTotalItems, clearCart } = useCartContext();
+	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
+	const [errors, setErrors] = useState({});
 	const [formData, setFormData] = useState({
 		name: '',
 		phone: '',
@@ -19,36 +23,94 @@ export default function OrderForm() {
 			...prev,
 			[name]: type === 'checkbox' ? checked : value,
 		}));
+
+		// Hiba törlése, ha a felhasználó javít
+		if (errors[name]) {
+			setErrors((prev) => ({
+				...prev,
+				[name]: '',
+			}));
+		}
+	};
+
+	const validateForm = () => {
+		const newErrors = {};
+
+		if (!formData.name.trim()) {
+			newErrors.name = 'A név megadása kötelező';
+		} else if (formData.name.trim().length < 2) {
+			newErrors.name = 'A név legalább 2 karakter hosszú legyen';
+		}
+
+		if (!formData.phone.trim()) {
+			newErrors.phone = 'A telefonszám megadása kötelező';
+		} else if (!/^[\d\s\+\-\(\)]{8,}$/.test(formData.phone)) {
+			newErrors.phone = 'Érvényes telefonszámot adj meg';
+		}
+
+		if (!formData.email.trim()) {
+			newErrors.email = 'Az email cím megadása kötelező';
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+			newErrors.email = 'Érvényes email címet adj meg';
+		}
+
+		if (!formData.address.trim()) {
+			newErrors.address = 'A szállítási cím megadása kötelező';
+		} else if (formData.address.trim().length < 5) {
+			newErrors.address = 'A cím legalább 5 karakter hosszú legyen';
+		}
+
+		if (!formData.aszf) {
+			newErrors.aszf = 'Az ÁSZF elfogadása kötelező';
+		}
+
+		if (!formData.privacy) {
+			newErrors.privacy = 'Az adatvédelmi tájékoztató elfogadása kötelező';
+		}
+
+		setErrors(newErrors);
+		return Object.keys(newErrors).length === 0;
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		// Validáció
-		if (!formData.name || !formData.phone || !formData.address || !formData.email) {
-			alert('Kérlek töltsd ki az összes mezőt!');
-			return;
-		}
-
-		if (!formData.aszf || !formData.privacy) {
-			alert('Kérlek fogadd el az ÁSZF-et és az adatvédelmi tájékoztatót!');
+		if (!validateForm()) {
 			return;
 		}
 
 		setLoading(true);
 
 		try {
-			// TODO: Backend API call
-			console.log('Megrendelés adatok:', {
-				...formData,
+			const orderData = {
+				customer_name: formData.name,
+				customer_email: formData.email,
+				customer_phone: formData.phone,
+				delivery_address: formData.address,
 				items: cartItems,
-				total: getTotalPrice(),
-			});
+				total_price: getTotalPrice(),
+			};
 
-			alert('Megrendelés sikeresen leadva!');
-			// TODO: Clear cart + redirect to home
+			console.log('Megrendelés küldése:', orderData);
+
+			const response = await api.post('/orders', orderData);
+
+			console.log('Válasz a szervertől:', response.data);
+
+			alert('Megrendelés sikeresen leadva! Rendelésszám: #' + response.data.order.id);
+
+			// Kosár ürítése és vissza a főoldalra
+			clearCart();
+			navigate('/');
 		} catch (error) {
-			alert('Hiba a megrendelés során');
+			console.error('Hiba a megrendelés során:', error);
+			if (error.response) {
+				console.error('Szerver hiba:', error.response.data);
+				alert('Hiba a megrendelés során: ' + (error.response.data.message || 'Ismeretlen hiba'));
+			} else {
+				alert('Hálózati hiba a megrendelés során');
+			}
 		} finally {
 			setLoading(false);
 		}
@@ -75,13 +137,13 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="text"
-								className="form-control"
+								className={`form-control ${errors.name ? 'is-invalid' : ''}`}
 								id="name"
 								name="name"
 								value={formData.name}
 								onChange={handleChange}
-								required
 							/>
+							{errors.name && <div className="invalid-feedback">{errors.name}</div>}
 						</div>
 
 						<div className="mb-3">
@@ -90,14 +152,14 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="tel"
-								className="form-control"
+								className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
 								id="phone"
 								name="phone"
 								value={formData.phone}
 								onChange={handleChange}
 								placeholder="06301234567"
-								required
 							/>
+							{errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
 						</div>
 
 						<div className="mb-3">
@@ -106,14 +168,14 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="text"
-								className="form-control"
+								className={`form-control ${errors.address ? 'is-invalid' : ''}`}
 								id="address"
 								name="address"
 								value={formData.address}
 								onChange={handleChange}
 								placeholder="Budapest, 1234 utca 5."
-								required
 							/>
+							{errors.address && <div className="invalid-feedback">{errors.address}</div>}
 						</div>
 
 						<div className="mb-3">
@@ -122,13 +184,13 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="email"
-								className="form-control"
+								className={`form-control ${errors.email ? 'is-invalid' : ''}`}
 								id="email"
 								name="email"
 								value={formData.email}
 								onChange={handleChange}
-								required
 							/>
+							{errors.email && <div className="invalid-feedback">{errors.email}</div>}
 						</div>
 
 						<hr className="my-4" />
@@ -136,32 +198,16 @@ export default function OrderForm() {
 						<div className="form-check mb-3">
 							<input
 								type="checkbox"
-								className="form-check-input"
+								className={`form-check-input ${errors.aszf ? 'is-invalid' : ''}`}
 								id="aszf"
 								name="aszf"
 								checked={formData.aszf}
 								onChange={handleChange}
-								required
 							/>
 							<label className="form-check-label" htmlFor="aszf">
 								Elfogadom az <strong>ÁSZF</strong>-ben foglaltakat <span className="text-danger">*</span>
 							</label>
-						</div>
-
-						<div className="form-check mb-4">
-							<input
-								type="checkbox"
-								className="form-check-input"
-								id="privacy"
-								name="privacy"
-								checked={formData.privacy}
-								onChange={handleChange}
-								required
-							/>
-							<label className="form-check-label" htmlFor="privacy">
-								Elfogadom az <strong>adatvédelmi tájékoztatóban</strong> foglaltakat{' '}
-								<span className="text-danger">*</span>
-							</label>
+							{errors.aszf && <div className="invalid-feedback d-block">{errors.aszf}</div>}
 						</div>
 
 						<button type="submit" className="btn btn-success w-100 btn-lg" disabled={loading}>
@@ -192,7 +238,7 @@ export default function OrderForm() {
 							</div>
 							<div className="d-flex justify-content-between">
 								<h5>Végösszeg:</h5>
-								<h5 className="text-danger">{getTotalPrice()} Ft</h5>
+								<h5>{getTotalPrice()} Ft</h5>
 							</div>
 						</div>
 					</div>

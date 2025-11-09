@@ -100,15 +100,6 @@ export default function Pizza() {
 							<small className="text-muted">Feltétek: {pizza.toppings}</small>
 						</p>
 						<div className="mt-3">
-							<div className="mb-2">
-								<span className="text-primary fw-bold">Kis méret: {pizza.price_small || 0} Ft</span>
-							</div>
-							<div className="mb-2">
-								<span className="text-primary fw-bold">Közepes méret: {pizza.price_medium || 0} Ft</span>
-							</div>
-							<div className="mb-2">
-								<span className="text-primary fw-bold">Nagy méret: {pizza.price_large || 0} Ft</span>
-							</div>
 							<div className="mt-3">
 								<small className="text-muted">Népszerűség: {pizza.popularity || 'N/A'}</small>
 							</div>
@@ -125,21 +116,21 @@ export default function Pizza() {
 									<div className="btn-group w-100" role="group">
 										<button
 											type="button"
-											className={`btn ${selectedSize === 'small' ? 'btn-primary' : 'btn-outline-primary'}`}
+											className={`btn ${selectedSize === 'small' ? 'btn-primary' : 'btn-outline-success'}`}
 											onClick={() => setSelectedSize('small')}
 										>
 											Kis ({pizza.price_small || 0} Ft)
 										</button>
 										<button
 											type="button"
-											className={`btn ${selectedSize === 'medium' ? 'btn-primary' : 'btn-outline-primary'}`}
+											className={`btn ${selectedSize === 'medium' ? 'btn-primary' : 'btn-outline-success'}`}
 											onClick={() => setSelectedSize('medium')}
 										>
 											Közepes ({pizza.price_medium || 0} Ft)
 										</button>
 										<button
 											type="button"
-											className={`btn ${selectedSize === 'large' ? 'btn-primary' : 'btn-outline-primary'}`}
+											className={`btn ${selectedSize === 'large' ? 'btn-primary' : 'btn-outline-success'}`}
 											onClick={() => setSelectedSize('large')}
 										>
 											Nagy ({pizza.price_large || 0} Ft)

@@ -30,7 +30,7 @@ export default function Pizzas() {
 	}
 	return (
 		<div className="container mt-4">
-			<h1 className="text-primary mb-4">Találd meg kedvenc pizzádat</h1>
+			<h1 className="text-gray mb-4">Találd meg kedvenc pizzádat</h1>
 
 			{pizzas.length === 0 ? (
 				<div className="text-center">Jelenleg nincs ilyen pizza</div>
@@ -57,7 +57,9 @@ export default function Pizzas() {
 										<small className="text-muted">Népszerűség: {pizza.popularity}</small>
 									</div>
 								</div>
-								<Link to={`/pizzak/${pizza.id}`}>Megnézem</Link>
+								<Link to={`/pizzak/${pizza.id}`} className="btn btn-success w-100 btn-lg mt-4">
+									Megnézem
+								</Link>
 							</div>
 						</div>
 					))}

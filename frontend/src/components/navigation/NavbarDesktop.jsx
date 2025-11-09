@@ -32,7 +32,7 @@ export default function NavbarDesktop() {
 						<Link to="/kosar" className="nav-link position-relative m-0">
 							<i className="bi bi-cart3 fw-semibold text-dark" style={{ fontSize: '1.5rem' }}></i>
 							{getTotalItems() > 0 && (
-								<span className="position-absolute badge rounded-pill bg-danger" style={{ top: '-10px' }}>
+								<span className="position-absolute badge rounded-pill bg-success" style={{ top: '-10px' }}>
 									Kosár: {getTotalItems()}
 								</span>
 							)}

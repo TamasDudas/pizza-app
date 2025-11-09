@@ -7,6 +7,7 @@ const CartContex = createContext({
 	updateQuantity: () => {},
 	getTotalItems: () => {},
 	getTotalPrice: () => {},
+	clearCart: () => {},
 });
 
 export const useCartContext = () => {
@@ -77,9 +78,21 @@ function CartProvider({ children }) {
 		return total;
 	}
 
+	function clearCart() {
+		setCartItems([]);
+	}
+
 	return (
 		<CartContex.Provider
-			value={{ cartItems, addTocart, removeFromCart, updateQuantity, getTotalItems, getTotalPrice }}
+			value={{
+				cartItems,
+				addTocart,
+				removeFromCart,
+				updateQuantity,
+				getTotalItems,
+				getTotalPrice,
+				clearCart,
+			}}
 		>
 			{children}
 		</CartContex.Provider>
