@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { usePizzasContext } from '../context/PizzasContext';
 
 export default function Home() {
-	const { popularPizzas, fetchPopulerPizzas, loading, error } = usePizzasContext();
+	const { pizzas, fetchPizzas, loading, error } = usePizzasContext();
 
 	useEffect(() => {
-		fetchPopulerPizzas();
+		fetchPizzas(1, 'popularity', 'desc');
 	}, []);
 
 	if (loading) {
@@ -22,32 +22,32 @@ export default function Home() {
 			<h1 className="text-primary mb-4">Pizza Maker</h1>
 			<h2 className="mb-4">Népszerű pizzák</h2>
 
-			{popularPizzas.length === 0 ? (
+			{pizzas.length === 0 ? (
 				<div className="text-center">Jelenleg nincs ilyen pizza</div>
 			) : (
 				<div className="row">
-					{popularPizzas.map((popularPizza) => (
-						<div key={popularPizza.id} className="col-md-4 mb-4">
+					{pizzas.map((pizza) => (
+						<div key={pizza.id} className="col-md-4 mb-4">
 							<div className="card h-100">
 								<img
-									src={popularPizza.image}
+									src={pizza.image}
 									className="card-img-top"
-									alt={popularPizza.name}
+									alt={pizza.name}
 									style={{ height: '200px', objectFit: 'cover' }}
 								/>
 								<div className="card-body">
-									<h5 className="card-title">{popularPizza.name}</h5>
-									<p className="card-text text-muted mb-2">{popularPizza.description}</p>
+									<h5 className="card-title">{pizza.name}</h5>
+									<p className="card-text text-muted mb-2">{pizza.description}</p>
 									<p className="card-text">
-										<small className="text-muted">Feltétek: {popularPizza.toppings}</small>
+										<small className="text-muted">Feltétek: {pizza.toppings}</small>
 									</p>
 
 									<div className="d-flex justify-content-between align-items-center mt-3">
-										<span className="text-primary fw-bold">{popularPizza.price_small} Ft-tól</span>
-										<small className="text-muted">Népszerűség: {popularPizza.popularity}</small>
+										<span className="text-primary fw-bold">{pizza.price_small} Ft-tól</span>
+										<small className="text-muted">Népszerűség: {pizza.popularity}</small>
 									</div>
 								</div>
-								<Link to={`/pizzak/${popularPizza.id}`} className="btn btn-success w-100 btn-lg mt-4">
+								<Link to={`/pizzak/${pizza.id}`} className="btn btn-success w-100 btn-lg mt-4">
 									Megnézem
 								</Link>
 							</div>

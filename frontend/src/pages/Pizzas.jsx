@@ -2,6 +2,7 @@ import React from 'react';
 import { usePizzasContext } from '../context/PizzasContext';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import PizzaFilter from '../components/PizzaFilter';
 
 export default function Pizzas() {
 	const {
@@ -12,14 +13,17 @@ export default function Pizzas() {
 		currentPage,
 		lastPage,
 		totalPage,
+		sortBy,
+		direction,
+		setSorting,
 		goToPage,
 		nextPage,
 		prevPage,
 	} = usePizzasContext();
 
 	useEffect(() => {
-		fetchPizzas();
-	}, []);
+		fetchPizzas(1);
+	}, [sortBy, direction]);
 
 	if (loading) {
 		return <div>A betöltés folyamatban....</div>;
@@ -31,6 +35,7 @@ export default function Pizzas() {
 	return (
 		<div className="container mt-4">
 			<h1 className="text-gray mb-4">Találd meg kedvenc pizzádat</h1>
+			<PizzaFilter sortBy={sortBy} direction={direction} setSorting={setSorting} />
 
 			{pizzas.length === 0 ? (
 				<div className="text-center">Jelenleg nincs ilyen pizza</div>

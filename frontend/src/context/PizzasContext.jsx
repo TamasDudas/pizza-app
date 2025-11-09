@@ -10,8 +10,11 @@ const PizzasContext = createContext({
 	lastPage: 1,
 	totalPage: 0,
 	perPage: 6,
-	fetchPopulerPizzas: async () => {},
+	sortBy: 'popularity',
+	direction: 'desc',
+	// fetchPopulerPizzas: async () => {},
 	fetchPizzas: async () => {},
+	setSorting: () => {},
 	goToPage: () => {},
 	nextPage: () => {},
 	prevPage: () => {},
@@ -26,38 +29,26 @@ export const usePizzasContext = () => {
 };
 
 function PizzasProvider({ children }) {
-	const [popularPizzas, setpopularPizzas] = useState([]);
 	const [pizzas, setPizzas] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
-	const [success, setSuccess] = useState(null);
 
 	const [currentPage, setCurrentPage] = useState(1);
 	const [lastPage, setLastPage] = useState(1);
 	const [totalPage, setTotalPage] = useState(0);
 	const [perPage, setPerPage] = useState(6);
 
-	//Népszerű pizzák
-	const fetchPopulerPizzas = async () => {
-		setLoading(true);
-		setError(null);
-		try {
-			const response = await api.get('/pizzas?sort_by=popularity&direction=desc&per_page=6');
-			const responseData = response.data.data;
-			setpopularPizzas(responseData);
-			setLoading(false);
-		} catch (error) {
-			setError('Hiba történt a lekérdezésben');
-		} finally {
-			setLoading(false);
-		}
-	};
+	//Szűrés beállítások
+	const [sortBy, setSortBy] = useState('popularity');
+	const [direction, setDirection] = useState('desc');
 
 	//Minden pizza
 	const fetchPizzas = async (page = currentPage) => {
 		setLoading(true);
 		try {
-			const response = await api.get(`/pizzas?page=${page}&per_page=6&sort_by=popularity&direction=desc`);
+			const response = await api.get(
+				`/pizzas?page=${page}&per_page=6&sort_by=${sortBy}&direction=${direction}`
+			);
 			const responseData = response.data;
 			setPizzas(responseData.data);
 			setCurrentPage(responseData.current_page);
@@ -69,6 +60,12 @@ function PizzasProvider({ children }) {
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	const setSorting = (newSortingBy, newDirection) => {
+		setSortBy(newSortingBy);
+		setDirection(newDirection);
+		setCurrentPage(1);
 	};
 
 	// Pagination függvények
@@ -93,15 +90,16 @@ function PizzasProvider({ children }) {
 	return (
 		<PizzasContext.Provider
 			value={{
-				popularPizzas,
 				loading,
 				error,
 				currentPage,
 				lastPage,
 				totalPage,
 				perPage,
-				fetchPopulerPizzas,
 				pizzas,
+				sortBy,
+				direction,
+				setSorting,
 				fetchPizzas,
 				goToPage,
 				nextPage,
