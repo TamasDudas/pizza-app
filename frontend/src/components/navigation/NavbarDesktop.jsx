@@ -5,8 +5,8 @@ import { useCartContext } from '../../context/CartContext';
 export default function NavbarDesktop() {
 	const { getTotalItems } = useCartContext();
 	return (
-		<nav className="navbar navbar-light bg-white shadow-sm py-3 mb-5">
-			<div className="container d-flex justify-content-between align-items-center">
+		<nav className="navbar d-none d-md-inline navbar-light bg-white shadow-sm">
+			<div className="container d-flex justify-content-between align-items-center py-3">
 				{/* LOGO */}
 				<Link to="/" className="navbar-brand fw-bold text-danger m-0">
 					LOGO
@@ -29,11 +29,9 @@ export default function NavbarDesktop() {
 					{/* KOSÁR */}
 					<div>
 						<Link to="/kosar" className="nav-link position-relative m-0">
-							<i className="bi bi-cart3 fw-semibold text-dark" style={{ fontSize: '1.5rem' }}></i>
+							<i className="bi bi-cart3 fw-semibold text-dark"></i>
 							{getTotalItems() > 0 && (
-								<span className="position-absolute badge rounded-pill bg-success" style={{ top: '-10px' }}>
-									Kosár: {getTotalItems()}
-								</span>
+								<span className=" badge rounded-pill bg-success  py-2">Kosár: {getTotalItems()}</span>
 							)}
 						</Link>
 					</div>

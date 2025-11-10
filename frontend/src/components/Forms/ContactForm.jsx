@@ -154,8 +154,6 @@ export default function ContactForm() {
 							</form>
 						</div>
 					</div>
-
-					{/* Kapcsolati információk */}
 				</div>
 			</div>
 		</div>

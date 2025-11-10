@@ -24,10 +24,10 @@ export default function Home() {
 		<div className="container mt-4">
 			<h1 className="text-success mb-4">Pizza Maker</h1>
 			<h2 className="mb-4">Népszerű pizzáink</h2>
-			<h5 className="my-5">
+			<p className="my-5">
 				Találd meg te is a kedvencedet az ország legjobb Pizzázójában. Minőségi alapanyagokkal és kemencében
 				sült pizzávál várjuk kedves látogatóinkat.{' '}
-			</h5>
+			</p>
 
 			{pizzas.length === 0 ? (
 				<div className="text-center">Jelenleg nincs ilyen pizza</div>
