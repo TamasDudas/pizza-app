@@ -1,4 +1,5 @@
 import React from 'react';
+import MapComponent from './MapComponent';
 
 export default function () {
 	return (
@@ -37,6 +38,9 @@ export default function () {
 						</div>
 					</div>
 				</div>
+			</div>
+			<div>
+				<MapComponent />
 			</div>
 		</div>
 	);

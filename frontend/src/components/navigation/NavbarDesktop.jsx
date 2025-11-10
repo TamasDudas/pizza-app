@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCartContext } from '../../context/CartContext';
+import pizzaicon from '../../assets/pizzaicon.png';
 
 export default function NavbarDesktop() {
 	const { getTotalItems } = useCartContext();
 	return (
-		<nav className="navbar d-none d-md-inline navbar-light bg-white shadow-sm">
-			<div className="container d-flex justify-content-between align-items-center py-3">
+		<nav className=" shadow-sm navbar navbar-light d-md-block d-none border border-success rounded-bottom-4">
+			<div className="container d-flex justify-content-between align-items-center">
 				{/* LOGO */}
 				<Link to="/" className="navbar-brand fw-bold text-danger m-0">
-					LOGO
+					<img src={pizzaicon} alt="pizzaicon" />
 				</Link>
 
 				{/* MENÜ + KOSÁR WRAPPER */}

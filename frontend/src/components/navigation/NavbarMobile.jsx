@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCartContext } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
+import pizzaicon from '../../assets/pizzaicon.png';
 
 export default function NavbarMobile() {
 	const { getTotalItems } = useCartContext();
@@ -12,11 +13,11 @@ export default function NavbarMobile() {
 	};
 
 	return (
-		<nav className="navbar navbar-light d-flex flex-column bg-white d-md-none shadow-sm">
+		<nav className="navbar navbar-light d-flex flex-column bg-white d-md-none shadow border border-success rounded-bottom-4">
 			<div className="container d-flex justify-content-between align-items-center">
 				{/* LOGO */}
 				<Link to="/" className="navbar-brand fw-bold text-danger m-0">
-					LOGO
+					<img src={pizzaicon} alt="pizzaicon" />
 				</Link>
 				<div className="d-flex  justify-content-evenly gap-5">
 					<div>
