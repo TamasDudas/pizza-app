@@ -23,11 +23,19 @@ export default function Home() {
 	return (
 		<div className="container mt-4">
 			<h1 className="text-success mb-4">Pizza Maker</h1>
-			<h2 className="mb-4">Népszerű pizzáink</h2>
-			<p className="my-5">
-				Találd meg te is a kedvencedet az ország legjobb Pizzázójában. Minőségi alapanyagokkal és kemencében
-				sült pizzávál várjuk kedves látogatóinkat.{' '}
-			</p>
+			<div className="row row-cols-2 my-5">
+				<p className="">
+					Találd meg te is a kedvencedet az ország legjobb Pizzázójában. Minőségi alapanyagokkal és kemencében
+					sült pizzávál várjuk kedves látogatóinkat.{' '}
+				</p>
+				<div className="text-center">
+					<Link to="/pizzak" className="btn btn-success w-50">
+						Megnézem az étlapot
+					</Link>
+				</div>
+			</div>
+
+			<h4 className="mb-4">Népszerű pizzáink:</h4>
 
 			{pizzas.length === 0 ? (
 				<div className="text-center">Jelenleg nincs ilyen pizza</div>
