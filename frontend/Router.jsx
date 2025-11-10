@@ -7,6 +7,7 @@ import MainLayout from './src/layouts/MainLayout';
 import Pizzas from './src/pages/Pizzas';
 import Cart from './src/pages/Cart';
 import Order from './src/pages/Order';
+import TermsAndCondations from './src/pages/TermsAndCondations';
 
 const router = createBrowserRouter([
 	{
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
 			{
 				path: '/rendeles',
 				element: <Order />,
+			},
+			{
+				path: '/aszf',
+				element: <TermsAndCondations />,
 			},
 			{
 				path: '*',

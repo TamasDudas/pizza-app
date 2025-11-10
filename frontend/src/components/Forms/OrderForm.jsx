@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCartContext } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api';
+import { Link } from 'react-router-dom';
 
 export default function OrderForm() {
 	const { cartItems, getTotalPrice, getTotalItems, clearCart } = useCartContext();
@@ -199,7 +200,7 @@ export default function OrderForm() {
 								onChange={handleChange}
 							/>
 							<label className="form-check-label" htmlFor="aszf">
-								Elfogadom az <strong>ÁSZF</strong>-ben foglaltakat <span className="text-danger">*</span>
+								Elfogadom az <Link to="/aszf">ÁSZF</Link>-ben foglaltakat <span className="text-danger">*</span>
 							</label>
 							{errors.aszf_accepted && <div className="invalid-feedback d-block">{errors.aszf_accepted}</div>}
 						</div>

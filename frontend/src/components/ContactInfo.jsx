@@ -9,7 +9,7 @@ export default function () {
 						<div className="card-body">
 							<i className="fas fa-phone fa-2x text-primary mb-3"></i>
 							<h5>Telefon</h5>
-							<p className="text-muted">+36 1 234 5678</p>
+							<p className="text-muted">+36 1 2345 5678</p>
 						</div>
 					</div>
 				</div>
