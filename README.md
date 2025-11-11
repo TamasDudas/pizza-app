@@ -297,6 +297,8 @@ npm install
 
 #### Adatbázis kapcsolat
 
+Az adatbázis csatolva a projekthez
+
 ```bash
 # Ellenőrizd az .env beállításokat
 php artisan config:clear
