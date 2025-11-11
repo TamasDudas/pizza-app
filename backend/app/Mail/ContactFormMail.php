@@ -21,7 +21,7 @@ class ContactFormMail extends Mailable
     public $contactData;
     public function __construct($contactData)
     {
-        //
+        //Kapcsolat a Controller-rel
         $this->contactData = $contactData;
     }
 
@@ -31,6 +31,8 @@ class ContactFormMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+
+            //Megadhatjuk a meta adatokat
             subject: 'Új kapcsolatfelvételi üzenet: ' . $this->contactData['subject'],
         );
     }
@@ -41,8 +43,8 @@ class ContactFormMail extends Mailable
     public function content(): Content
     {
         return new Content(
+            //Megkapja a template-et
             view: 'emails.contact',
-            with: ['contactData' => $this->contactData],
         );
     }
 

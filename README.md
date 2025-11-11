@@ -303,7 +303,6 @@ php artisan config:clear
 php artisan migrate:fresh --seed
 ```
 
-
 ## Szerző
 
 **Tamás Dudas**

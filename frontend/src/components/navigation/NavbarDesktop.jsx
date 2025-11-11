@@ -13,9 +13,8 @@ export default function NavbarDesktop() {
 					<img src={pizzaicon} alt="pizzaicon" />
 				</Link>
 
-				{/* MENÜ + KOSÁR WRAPPER */}
+				{/* MENÚ És KOSÁR */}
 				<div className="d-flex align-items-center gap-4">
-					{/* MENÚ */}
 					<div className="d-flex gap-3">
 						<Link to="/" className="nav-link fw-semibold text-dark m-0">
 							Főoldal

@@ -22,6 +22,7 @@ class ContactController extends Controller
         //Mentjük az eadatbázisba
         $contact = Contact::create($validated);
 
+
         Mail::to('test@example.com')->send(new ContactFormMail($validated));
 
 

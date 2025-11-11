@@ -25,58 +25,24 @@ export default function OrderForm() {
 		}));
 
 		// Hiba törlése, ha a felhasználó javít
-		if (errors[name]) {
+		const backendFieldName = {
+			name: 'customer_name',
+			email: 'customer_email',
+			phone: 'customer_phone',
+			address: 'delivery_address',
+			aszf_accepted: 'aszf_accepted',
+		}[name];
+
+		if (backendFieldName && errors[backendFieldName]) {
 			setErrors((prev) => ({
 				...prev,
-				[name]: '',
+				[backendFieldName]: null,
 			}));
 		}
 	};
 
-	const validateForm = () => {
-		const newErrors = {};
-		console.log('Validáció - formData:', formData); // DEBUG
-
-		if (!formData.name.trim()) {
-			newErrors.name = 'A név megadása kötelező';
-		} else if (formData.name.trim().length < 2) {
-			newErrors.name = 'A név legalább 2 karakter hosszú legyen';
-		}
-
-		if (!formData.phone.trim()) {
-			newErrors.phone = 'A telefonszám megadása kötelező';
-		} else if (!/^[\d\s\+\-\(\)]{8,}$/.test(formData.phone)) {
-			newErrors.phone = 'Érvényes telefonszámot adj meg';
-		}
-
-		if (!formData.email.trim()) {
-			newErrors.email = 'Az email cím megadása kötelező';
-		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-			newErrors.email = 'Érvényes email címet adj meg';
-		}
-
-		if (!formData.address.trim()) {
-			newErrors.address = 'A szállítási cím megadása kötelező';
-		} else if (formData.address.trim().length < 5) {
-			newErrors.address = 'A cím legalább 5 karakter hosszú legyen';
-		}
-
-		if (!formData.aszf_accepted) {
-			newErrors.aszf_accepted = 'Az ÁSZF elfogadása kötelező';
-		}
-
-		setErrors(newErrors);
-		console.log('Validációs hibák:', newErrors); // DEBUG
-		return Object.keys(newErrors).length === 0;
-	};
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-		// Validáció
-		if (!validateForm()) {
-			return;
-		}
 
 		setLoading(true);
 
@@ -101,7 +67,11 @@ export default function OrderForm() {
 			clearCart();
 			navigate('/');
 		} catch (error) {
-			if (error.response) {
+			// Validációs hibák kezelése
+			if (error.response?.status === 422) {
+				const validationErrors = error.response.data.errors;
+				setErrors(validationErrors);
+			} else if (error.response) {
 				alert('Hiba a megrendelés során: ' + (error.response.data.message || 'Ismeretlen hiba'));
 			} else {
 				alert('Hálózati hiba a megrendelés során');
@@ -132,13 +102,13 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="text"
-								className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+								className={`form-control ${errors.customer_name ? 'is-invalid' : ''}`}
 								id="name"
 								name="name"
 								value={formData.name}
 								onChange={handleChange}
 							/>
-							{errors.name && <div className="invalid-feedback">{errors.name}</div>}
+							{errors.customer_name && <div className="invalid-feedback">{errors.customer_name[0]}</div>}
 						</div>
 
 						<div className="mb-3">
@@ -147,14 +117,14 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="tel"
-								className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+								className={`form-control ${errors.customer_phone ? 'is-invalid' : ''}`}
 								id="phone"
 								name="phone"
 								value={formData.phone}
 								onChange={handleChange}
 								placeholder="06301234567"
 							/>
-							{errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
+							{errors.customer_phone && <div className="invalid-feedback">{errors.customer_phone[0]}</div>}
 						</div>
 
 						<div className="mb-3">
@@ -163,14 +133,14 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="text"
-								className={`form-control ${errors.address ? 'is-invalid' : ''}`}
+								className={`form-control ${errors.delivery_address ? 'is-invalid' : ''}`}
 								id="address"
 								name="address"
 								value={formData.address}
 								onChange={handleChange}
 								placeholder="Budapest, 1234 utca 5."
 							/>
-							{errors.address && <div className="invalid-feedback">{errors.address}</div>}
+							{errors.delivery_address && <div className="invalid-feedback">{errors.delivery_address[0]}</div>}
 						</div>
 
 						<div className="mb-3">
@@ -179,13 +149,13 @@ export default function OrderForm() {
 							</label>
 							<input
 								type="email"
-								className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+								className={`form-control ${errors.customer_email ? 'is-invalid' : ''}`}
 								id="email"
 								name="email"
 								value={formData.email}
 								onChange={handleChange}
 							/>
-							{errors.email && <div className="invalid-feedback">{errors.email}</div>}
+							{errors.customer_email && <div className="invalid-feedback">{errors.customer_email[0]}</div>}
 						</div>
 
 						<hr className="my-4" />
@@ -202,7 +172,7 @@ export default function OrderForm() {
 							<label className="form-check-label" htmlFor="aszf">
 								Elfogadom az <Link to="/aszf">ÁSZF</Link>-ben foglaltakat <span className="text-danger">*</span>
 							</label>
-							{errors.aszf_accepted && <div className="invalid-feedback d-block">{errors.aszf_accepted}</div>}
+							{errors.aszf_accepted && <div className="invalid-feedback d-block">{errors.aszf_accepted[0]}</div>}
 						</div>
 
 						<button type="submit" className="btn btn-success w-100 btn-lg" disabled={loading}>

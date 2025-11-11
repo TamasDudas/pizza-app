@@ -30,7 +30,7 @@ export default function Home() {
 				</p>
 				<div className="text-center">
 					<Link to="/pizzak" className="btn btn-success w-50">
-						Megnézem az étlapot
+						Megnézem a többi pizzat
 					</Link>
 				</div>
 			</div>

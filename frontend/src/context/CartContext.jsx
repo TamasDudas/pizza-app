@@ -62,6 +62,7 @@ function CartProvider({ children }) {
 		setCartItems(updatedCartItems);
 	}
 
+	//Teljes termék
 	function getTotalItems() {
 		const total = cartItems.reduce((sum, item) => {
 			return sum + item.quantity;
@@ -70,6 +71,7 @@ function CartProvider({ children }) {
 		return total;
 	}
 
+	//Teljes összeg
 	function getTotalPrice() {
 		const total = cartItems.reduce((sum, item) => {
 			return sum + parseInt(item.price) * parseInt(item.quantity);

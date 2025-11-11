@@ -8,7 +8,7 @@ const MapComponent = () => {
 	};
 
 	const center = {
-		lat: 47.4979, // Budapest
+		lat: 47.4979,
 		lng: 19.0402,
 	};
 

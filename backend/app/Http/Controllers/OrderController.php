@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Mail\OrderConfirmationMail;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -21,6 +22,7 @@ class OrderController extends Controller
             'total_price' => 'required|integer|min:0',
             'aszf_accepted' => 'required|boolean|accepted'
         ]);
+
 
 
         $order = Order::create($validated);

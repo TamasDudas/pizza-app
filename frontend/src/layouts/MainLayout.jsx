@@ -14,7 +14,7 @@ export default function MainLayout() {
 			<main className="container" style={{ minHeight: '75vh' }}>
 				<Outlet />
 			</main>
-			<footer className="bg-info container-fluid mt-4">
+			<footer className="container-fluid mt-4" style={{ backgroundColor: '#154d35' }}>
 				<Footer />
 			</footer>
 		</div>

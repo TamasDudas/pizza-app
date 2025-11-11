@@ -10,10 +10,19 @@ export default function ContactForm() {
 		aszf_accepted: false,
 	});
 	const [loading, setLoading] = useState(false);
+	const [errors, setErrors] = useState(null);
 
 	const handleChange = (e) => {
 		const { name, value, type, checked } = e.target;
 		setformData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+
+		// Hiba törlése, ha a felhasználó javít
+		if (errors && errors[name]) {
+			setErrors((prev) => ({
+				...prev,
+				[name]: null,
+			}));
+		}
 	};
 
 	const handleSubmit = async (e) => {
@@ -31,7 +40,6 @@ export default function ContactForm() {
 
 			const response = await api.post('/contact', emailData);
 
-			console.log('Sikeres küldés:', response.data);
 			alert('Üzenet sikeresen elküldve!');
 
 			// Form ürítése
@@ -43,11 +51,13 @@ export default function ContactForm() {
 				aszf_accepted: false,
 			});
 		} catch (error) {
-			console.error('Hiba:', error);
-			if (error.response) {
-				alert('Hiba: ' + (error.response.data.message || 'Ismeretlen hiba'));
+			//Hasonlóan mint a rendelés leadásánál
+			if (error.response?.status === 422) {
+				const validationErrors = error.response.data.errors;
+				setErrors(validationErrors);
+				setLoading(false);
 			} else {
-				alert('Hálózati hiba történt');
+				alert('Hálózati hiba történt: ' + error.response?.data?.message);
 			}
 		} finally {
 			setLoading(false);
@@ -73,13 +83,15 @@ export default function ContactForm() {
 											</label>
 											<input
 												type="text"
-												className="form-control"
+												className={`form-control ${errors?.name ? 'is-invalid' : ''}`}
 												id="name"
 												name="name"
 												value={formData.name}
 												onChange={handleChange}
 												placeholder="Add meg a neved"
 											/>
+
+											{errors?.name && <div className="invalid-feedback d-block">{errors.name[0]}</div>}
 										</div>
 									</div>
 
@@ -90,13 +102,14 @@ export default function ContactForm() {
 											</label>
 											<input
 												type="email"
-												className="form-control"
+												className={`form-control ${errors?.email ? 'is-invalid' : ''}`}
 												id="email"
 												name="email"
 												value={formData.email}
 												onChange={handleChange}
 												placeholder="pelda@email.com"
 											/>
+											{errors?.email && <div className="invalid-feedback d-block">{errors.email[0]}</div>}
 										</div>
 									</div>
 								</div>
@@ -107,13 +120,14 @@ export default function ContactForm() {
 									</label>
 									<input
 										type="text"
-										className="form-control"
+										className={`form-control ${errors?.subject ? 'is-invalid' : ''}`}
 										id="subject"
 										name="subject"
 										value={formData.subject}
 										onChange={handleChange}
 										placeholder="Mivel kapcsolatban írsz?"
 									/>
+									{errors?.subject && <div className="invalid-feedback d-block">{errors.subject[0]}</div>}
 								</div>
 
 								<div className="mb-4">
@@ -121,7 +135,7 @@ export default function ContactForm() {
 										Üzenet <span className="text-danger">*</span>
 									</label>
 									<textarea
-										className="form-control"
+										className={`form-control ${errors?.message ? 'is-invalid' : ''}`}
 										id="message"
 										name="message"
 										rows="6"
@@ -129,21 +143,22 @@ export default function ContactForm() {
 										onChange={handleChange}
 										placeholder="Írd ide az üzeneted..."
 									></textarea>
+									{errors?.message && <div className="invalid-feedback d-block">{errors.message[0]}</div>}
 								</div>
 
 								<div className="form-check mb-3">
 									<input
 										type="checkbox"
-										className="form-check-input"
+										className={`form-check-input ${errors?.aszf_accepted ? 'is-invalid' : ''}`}
 										id="aszf"
 										name="aszf_accepted"
 										checked={formData.aszf_accepted}
 										onChange={handleChange}
-										required
 									/>
 									<label className="form-check-label" htmlFor="aszf">
 										Elfogadom az <strong>ÁSZF</strong>-ben foglaltakat <span className="text-danger">*</span>
 									</label>
+									{errors?.aszf_accepted && <div className="invalid-feedback d-block">{errors.aszf_accepted[0]}</div>}
 								</div>
 
 								<div className="d-grid">
