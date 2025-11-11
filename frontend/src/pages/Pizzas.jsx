@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { usePizzasContext } from '../context/PizzasContext';
 import { useEffect, useState } from 'react';
 import PizzaFilter from '../components/PizzaFilter';
@@ -6,9 +6,24 @@ import PizzaList from '../components/PizzaList';
 import SearchInfo from '../components/SearchInfo';
 import debounce from 'lodash.debounce';
 
+/**
+ * Pizzas oldal komponens - Pizzák listázása, keresése és szűrése
+ *
+ * Ez az oldal biztosítja:
+ * - Pizzák megjelenítését a PizzasContext segítségével
+ * - Keresési funkcionalitást (debounce-olt, minimum 3 karakter)
+ * - Rendezési opciókat
+ * - Lapozást
+ * - Betöltési és hiba állapotokat
+ *
+ * Használja a PizzasContext-et az adatok és függvények eléréséhez.
+ */
+
 export default function Pizzas() {
-	const [searchTerm, setSearchTerm] = useState('');
-	const searchInputRef = React.useRef(null);
+	const [searchTerm, setSearchTerm] = useState(''); // Keresési kifejezés állapota
+	const searchInputRef = useRef(null); // Keresési mező referenciája
+
+	// PizzasContext hook használata - adatok és függvények lekérése
 	const {
 		pizzas,
 		fetchPizzas,
@@ -25,18 +40,21 @@ export default function Pizzas() {
 		prevPage,
 	} = usePizzasContext();
 
+	// Debounce-olt keresési függvény - 300ms késleltetés, minimum 3 karakter
 	const debouncedSearch = useMemo(() => {
 		return debounce((value) => {
-			setSearchTerm(value);
 			if (value.length >= 3) {
-				fetchPizzas(1, value);
+				setSearchTerm(value);
+				fetchPizzas(1, value); // Keresés az első oldalon
 			} else if (value.length === 0) {
+				setSearchTerm('');
 				fetchPizzas(1, ''); // Üres keresés - mutassa az összes pizzát
 			}
-			// 1-2 karakter esetén nem csinál API hívást, de beállítja a state-et
+			// 1-2 karakter esetén nem csinál semmit
 		}, 300);
 	}, [fetchPizzas]);
 
+	// Keresés változás kezelője - azonnali üres keresés vagy debounce-olt keresés
 	const handleChange = (e) => {
 		const value = e.target.value;
 		if (value === '') {
@@ -48,6 +66,7 @@ export default function Pizzas() {
 		}
 	};
 
+	// Rendezés változásakor újratöltés az első oldalon
 	useEffect(() => {
 		fetchPizzas(1, searchTerm);
 	}, [sortBy, direction]);
@@ -57,12 +76,14 @@ export default function Pizzas() {
 		fetchPizzas(1, '');
 	}, []);
 
+	// Cleanup: debounce függvény megszakítása komponens unmountkor
 	useEffect(() => {
 		return () => {
 			debouncedSearch.cancel();
 		};
 	}, [debouncedSearch]);
 
+	// Keresés visszaállítása - üres keresésre váltás és mező ürítése
 	const handleResetSearch = () => {
 		setSearchTerm('');
 		fetchPizzas(1, '');
@@ -71,10 +92,12 @@ export default function Pizzas() {
 		}
 	};
 
+	// Betöltési állapot kezelése
 	if (loading) {
 		return <div>A betöltés folyamatban....</div>;
 	}
 
+	// Hiba állapot kezelése
 	if (error) {
 		return <div>A betöltés sikertelen</div>;
 	}
@@ -83,6 +106,7 @@ export default function Pizzas() {
 		<div className="container mt-4">
 			<h1 className="text-gray mb-4">Találd meg kedvenc pizzádat</h1>
 
+			{/* Szűrési és keresési komponens */}
 			<PizzaFilter
 				sortBy={sortBy}
 				direction={direction}
@@ -91,20 +115,24 @@ export default function Pizzas() {
 				onSearchChange={handleChange}
 			/>
 
+			{/* Keresési információk megjelenítése */}
 			<SearchInfo searchTerm={searchTerm} pizzasCount={pizzas.length} onResetSearch={handleResetSearch} />
 
+			{/* Pizzák listája */}
 			<PizzaList pizzas={pizzas} searchTerm={searchTerm} onResetSearch={handleResetSearch} />
 
-			{/* Pagination */}
+			{/* Lapozás - csak ha több oldal van */}
 			{lastPage > 1 && (
 				<nav className="mt-4">
 					<ul className="pagination justify-content-center">
+						{/* Előző oldal gomb */}
 						<li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
 							<button className="page-link" onClick={() => prevPage(searchTerm)} disabled={currentPage === 1}>
 								Előző
 							</button>
 						</li>
 
+						{/* Oldalszám gombok */}
 						{Array.from({ length: lastPage }, (_, i) => i + 1).map((page) => (
 							<li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
 								<button className="page-link" onClick={() => goToPage(page, searchTerm)}>
@@ -113,6 +141,7 @@ export default function Pizzas() {
 							</li>
 						))}
 
+						{/* Következő oldal gomb */}
 						<li className={`page-item ${currentPage === lastPage ? 'disabled' : ''}`}>
 							<button
 								className="page-link"

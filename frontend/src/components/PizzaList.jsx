@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function PizzaList({ pizzas, searchTerm, onResetSearch }) {
 	if (pizzas.length === 0) {
-		if (searchTerm && searchTerm.length >= 3) {
+		if (searchTerm) {
 			return (
 				<div className="text-center py-5">
 					<h5>Nincs találat a "{searchTerm}" keresésre</h5>
@@ -10,15 +10,6 @@ export default function PizzaList({ pizzas, searchTerm, onResetSearch }) {
 					<button className="btn btn-outline-success" onClick={onResetSearch}>
 						Összes pizza megjelenítése
 					</button>
-				</div>
-			);
-		} else if (searchTerm && searchTerm.length < 3) {
-			return (
-				<div className="text-center py-5">
-					<h5>Írj be legalább 3 karaktert a kereséshez</h5>
-					<p className="text-muted">
-						Jelenleg: "{searchTerm}" ({searchTerm.length} karakter)
-					</p>
 				</div>
 			);
 		}

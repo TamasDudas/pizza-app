@@ -23,7 +23,7 @@ export default function Home() {
 	return (
 		<div className="container mt-4">
 			<h1 className="text-success mb-4">Pizza Maker</h1>
-			<div className="row row-cols-2 my-5">
+			<div className="row row-cols-1 row-cols-md-2 my-5">
 				<p className="">
 					Találd meg te is a kedvencedet az ország legjobb Pizzázójában. Minőségi alapanyagokkal és kemencében
 					sült pizzávál várjuk kedves látogatóinkat.{' '}

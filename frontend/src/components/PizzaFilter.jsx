@@ -1,5 +1,21 @@
 import React from 'react';
 
+/**
+ * PizzaFilter komponens - Szűrési és keresési funkciók biztosítása
+ *
+ * Ez a komponens biztosítja:
+ * - Keresési mezőt a pizzák közötti kereséshez (minimum 3 karakter)
+ * - Rendezési opciókat név, ár vagy népszerűség szerint
+ * - Rendezési irány beállítását (növekvő/csökkenő)
+ *
+ * Props:
+ * - sortBy: Aktuális rendezés alapja
+ * - direction: Rendezés iránya
+ * - setSorting: Rendezés beállításának függvénye
+ * - searchInputRef: Keresési mező referenciája
+ * - onSearchChange: Keresés változás kezelője
+ */
+
 export default function PizzaFilter({
 	sortBy,
 	direction,
@@ -13,7 +29,7 @@ export default function PizzaFilter({
 				<div className="card p-3">
 					<h5 className="mb-3">Szűrés és keresés</h5>
 
-					{/* Keresési mező */}
+					{/* Keresési mező - minimum 3 karakter szükséges a kereséshez */}
 					<div className="mb-3">
 						<label className="form-label">Keresés:</label>
 						<input
@@ -25,7 +41,7 @@ export default function PizzaFilter({
 						/>
 					</div>
 
-					{/* Rendezési opciók */}
+					{/* Rendezési opciók - név, ár vagy népszerűség szerinti rendezés */}
 					<div className="row">
 						<div className="col-md-6">
 							<label className="form-label">Rendezés alapja:</label>
